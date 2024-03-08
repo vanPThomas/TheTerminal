@@ -45,6 +45,9 @@ private:
     std::string commandHistory = "";
     Color envColor = GREEN;
     Root *root{};
+    HardDrive *currentDriveLocation;
+    Folder* currentFolderLocation;
+
 
 };
 

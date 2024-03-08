@@ -18,8 +18,8 @@ int main()
 
     ToggleFullscreen();
 
-    HardDrive hd{ "a", 32768 };
-    HardDrive hd2{ "b", 16384 };
+    HardDrive hd{ "A", 32768 };
+    HardDrive hd2{ "B", 16384 };
     Root* root = new Root();
     root->addHardDrive(hd);
     root->addHardDrive(hd2);

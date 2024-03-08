@@ -101,7 +101,10 @@ void EnvironmentManager::detectReturnPress()
     {
         commandHistory += diskPromptText + " " + inputString + "\n\n\n";
         diskPromptCoord = { diskPromptCoord.x, diskPromptCoord.y + verticalCoordJump };
-        CommandHandler::executeCommand(this, inputString);
+        if(!inputString.empty())
+        {
+            CommandHandler::executeCommand(this, inputString);
+        }
         typingCoord = { static_cast<float>(diskPromptText.length()) * cursorJumpDistance + cursorJumpDistance+10, typingCoord.y + verticalCoordJump };
         cursorCoord = { static_cast<float>(diskPromptText.length()) * cursorJumpDistance + cursorJumpDistance, cursorCoord.y + verticalCoordJump };
         inputString = "";
@@ -119,7 +122,7 @@ void EnvironmentManager::printEverythingToScreen()
 void EnvironmentManager::addToCommandHistory(std::string stringToAdd)
 { 
     commandHistory = commandHistory + stringToAdd + "\n\n\n"; 
-    cursorCoord = { cursorCoord.x, cursorCoord.y + verticalCoordJump };
-    typingCoord = { typingCoord.x, cursorCoord.y};
-    diskPromptCoord = { diskPromptCoord.x, cursorCoord.y};
+    cursorCoord = { cursorCoord.x, cursorCoord.y + verticalCoordJump};
+    typingCoord = { typingCoord.x, typingCoord.y + verticalCoordJump};
+    diskPromptCoord = { diskPromptCoord.x, diskPromptCoord.y+ verticalCoordJump};
 }

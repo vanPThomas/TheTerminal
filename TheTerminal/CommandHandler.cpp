@@ -17,21 +17,34 @@ void CommandHandler::executeCommand(EnvironmentManager* em, std::string input)
 		splitCommand.push_back(token);
 	}
 	std::cout << splitCommand[0] << "\n";
+	Root* root = em->getRoot();
 
 	if (splitCommand[0] == "TELEPORT" && !splitCommand[1].empty())
 	{
-		em->setDiskPrompt(splitCommand[1] + ":/>");
-		std::cout << "test2" << "\n";
+		int i = 0;
+		std::list<HardDrive> hds = root->getConnectdHD();
+		for (auto it = hds.begin(); it != hds.end(); ++it)
+		{
+			if (it->getDriveName() == splitCommand[1])
+			{
+				em->setDiskPrompt(splitCommand[1] + ":/>");
+				i = 1;
+				break;
+			}
+		}
+		if (i == 0)
+		{
+			em->addToCommandHistory("Not a valid drive letter!");
+		}
 	}
 	else if(splitCommand[0] == "SCAN")
 	{
-		Root* root = em->getRoot();
 		std::list<HardDrive> hds = root->getConnectdHD();
 		for (auto it = hds.begin(); it != hds.end(); ++it)
 		{
 			em->addToCommandHistory("Drive: " + it->getDriveName() + "\t\t" + std::to_string(it->getHardDriveSize()) + "kb");
 		}
-		Vector2 newpromptextloc{ em->getDiskPromptTextCoord().x, em->getDiskPromptTextCoord().y + (em->getVerticleCoordJump() * (hds.size() - 1)) };
+		Vector2 newpromptextloc{ em->getDiskPromptTextCoord().x, em->getDiskPromptTextCoord().y + (em->getVerticleCoordJump() * (hds.size() - 2)) };
 
 		em->setDiskPromptCoord(newpromptextloc);
 	}

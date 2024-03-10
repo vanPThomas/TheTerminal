@@ -11,6 +11,6 @@ public:
 	std::string getRootPrompt() { return rootPrompt; }
 private:
 	std::list<HardDrive *> connectedHardDrives{};
-	std::string rootPrompt{ "/" };
+	std::string rootPrompt{ "#" };
 };
 

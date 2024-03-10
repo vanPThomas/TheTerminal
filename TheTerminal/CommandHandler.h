@@ -11,6 +11,9 @@ public:
 	static void triggerHelp(EnvironmentManager* em);
 	static void triggerScan(EnvironmentManager* em, Root* root);
 	static void triggerShift(EnvironmentManager* em, std::vector<std::string> splitCommand);
+	static void triggerShiftUp(EnvironmentManager* em);
+	static void triggerRoot(EnvironmentManager* em);
+
 
 private:
 	

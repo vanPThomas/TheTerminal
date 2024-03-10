@@ -24,8 +24,8 @@ int main()
     Root* root = new Root();
     root->addHardDrive(hardDrive);
     root->addHardDrive(hardDrive2);
-    Folder* folder = new Folder("TESTFOLDER", NULL);
-    Folder* folder2 = new Folder("TEST", folder);
+    Folder* folder = new Folder("SYSTEM", NULL);
+    Folder* folder2 = new Folder("DRIVERS", folder);
     folder->addFolderToFolders(folder2);
     hardDrive2->addFolder(folder);
     EnvironmentManager* em = new EnvironmentManager(root->getRootPrompt(), root);

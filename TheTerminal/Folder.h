@@ -5,10 +5,14 @@
 class Folder
 {
 public:
-	Folder(std::string FolderName);
+	Folder(std::string FolderName, Folder *ParentFolder);
 	std::string getFolderName(){ return folderName; }
+	Folder* getParentFolder() { return parentFolder; }
+	std::list<Folder*> getFolders(){ return folders; }
+	void addFolderToFolders(Folder* folder) { folders.push_back(folder); }
 private:
 	std::string folderName{};
-	// std::list<Folder> folders{};
+	std::list<Folder *> folders{};
+	Folder* parentFolder{};
 
 };

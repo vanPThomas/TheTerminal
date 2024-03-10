@@ -5,6 +5,7 @@
 #include "EnvironmentManager.h"
 #include "Root.h"
 #include "HardDrive.h"
+#include "MethodLibrary.h"
 
 int main()
 {
@@ -18,27 +19,50 @@ int main()
 
     ToggleFullscreen();
 
-    HardDrive hd{ "A", 32768 };
-    HardDrive hd2{ "B", 16384 };
+    HardDrive* hardDrive = new HardDrive("A", 32768);
+    HardDrive* hardDrive2 = new HardDrive("B", 16384);
     Root* root = new Root();
-    root->addHardDrive(hd);
-    root->addHardDrive(hd2);
+    root->addHardDrive(hardDrive);
+    root->addHardDrive(hardDrive2);
+    Folder* folder = new Folder("TESTFOLDER", NULL);
+    Folder* folder2 = new Folder("TEST", folder);
+    folder->addFolderToFolders(folder2);
+    hardDrive2->addFolder(folder);
     EnvironmentManager* em = new EnvironmentManager(root->getRootPrompt(), root);
-    std::string systemBootingMessage = "HoloGeisha OS booting ...";
-    em->addToCommandHistory(systemBootingMessage);
+    bool hasBooted = false;
+    bool waiting = false;
+    float bootNextUpdate = MethodLibrary::getRandomNumber(500, 2000) / 1000;
+    float currentBootTime = 0.0f;
 
     while (!WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(BLACK);
-        em->detectKeyPress();
-        em->detectReturnPress();
-        em->printEverythingToScreen();
+
+        if (!hasBooted)
+        {
+            if (currentBootTime > bootNextUpdate)
+            {
+                bootNextUpdate = MethodLibrary::getRandomNumber(100, 300) / 1000.0f;
+                currentBootTime = 0.0f;
+                hasBooted = em->bootSequence();
+                em->printCommandHistory();
+            }
+            else
+            {
+                currentBootTime += GetFrameTime();
+                em->printCommandHistory();
+            }
+        }
+        else
+        {
+            em->detectKeyPress();
+            em->detectReturnPress();
+            em->printEverythingToScreen();
+        }
+
         EndDrawing();
     }
-
-
-
     CloseWindow();
     return 0;
 }

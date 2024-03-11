@@ -176,7 +176,7 @@ void CommandHandler::triggerShift(EnvironmentManager *em, std::vector<std::strin
 		folders = em->getCurrentDriveLocation()->getFolders();
 		for (auto it = folders.begin(); it != folders.end(); ++it)
 		{
-			em->addToCommandHistory((*it)->getFolderName());
+			//em->addToCommandHistory((*it)->getFolderName());
 			if ((*it)->getFolderName() == splitCommand[1])
 			{
 				em->setDiskPrompt(em->getCurrentDriveLocation()->getDriveName() + "#" + splitCommand[1] + "=>");
@@ -202,7 +202,7 @@ void CommandHandler::triggerShift(EnvironmentManager *em, std::vector<std::strin
 		}
 		for (auto it = folders.begin(); it != folders.end(); ++it)
 		{
-			em->addToCommandHistory((*it)->getFolderName());
+			//em->addToCommandHistory((*it)->getFolderName());
 			if ((*it)->getFolderName() == splitCommand[1])
 			{
 				promptText += "#";

@@ -16,7 +16,7 @@ EnvironmentManager::EnvironmentManager(std::string newDiskPromptText, Root* Root
 
 void EnvironmentManager::detectKeyPress()
 {
-
+    // detect what key has been pressed
     updateTime += GetFrameTime();
 
     if (updateTime >= cursorBlinkTime)
@@ -102,6 +102,7 @@ void EnvironmentManager::detectKeyPress()
 
 void EnvironmentManager::detectReturnPress()
 {
+    // detect if ENTER was pressed
     if (IsKeyPressed(KEY_ENTER))
     {
         commandHistory += diskPromptText + " " + inputString + "\n\n\n";
@@ -127,6 +128,7 @@ void EnvironmentManager::detectReturnPress()
 
 void EnvironmentManager::printEverythingToScreen()
 {
+    // print everything to screen
     printCommandHistory();
     DrawTextEx(font, diskPromptText.c_str(), diskPromptCoord, 40, 3, envColor);
     typingCoord = { static_cast<float>(diskPromptText.length()) * cursorJumpDistance + cursorJumpDistance + 10, typingCoord.y };
@@ -135,6 +137,7 @@ void EnvironmentManager::printEverythingToScreen()
 
 void EnvironmentManager::addToCommandHistory(std::string stringToAdd)
 {
+    // add a line to the command history
     commandHistory = commandHistory + stringToAdd + "\n\n\n";
     if (GetScreenHeight() - 200 > cursorCoord.y)
     {
@@ -151,6 +154,7 @@ void EnvironmentManager::addToCommandHistory(std::string stringToAdd)
 
 bool EnvironmentManager::bootSequence()
 {
+    // create boot sequence
     if (bootSequencePlace < bootSequenceList.size())
     {
         auto it = std::next(bootSequenceList.begin(), bootSequencePlace);
@@ -168,5 +172,6 @@ bool EnvironmentManager::bootSequence()
 
 void EnvironmentManager::printCommandHistory()
 {
+    // print command history
     DrawTextEx(font, commandHistory.c_str(), historyCoord, 40, 3, envColor);
 }

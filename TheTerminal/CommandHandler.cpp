@@ -19,7 +19,7 @@ void CommandHandler::executeCommand(EnvironmentManager* em, std::string input)
 	std::cout << splitCommand[0] << "\n";
 	Root* root = em->getRoot();
 
-	if (splitCommand[0] == "TELEPORT" && !splitCommand[1].empty())
+	if (splitCommand[0] == "TELEPORT")
 	{
 		triggerTeleport(em, root, splitCommand);
 	}
@@ -35,7 +35,7 @@ void CommandHandler::executeCommand(EnvironmentManager* em, std::string input)
 	{
 		triggerHelp(em);
 	}
-	else if (splitCommand[0] == "SHIFT" && !splitCommand[1].empty())
+	else if (splitCommand[0] == "SHIFT")
 	{
 		triggerShift(em, splitCommand);
 	}
@@ -47,6 +47,14 @@ void CommandHandler::executeCommand(EnvironmentManager* em, std::string input)
 	{
 		triggerRoot(em);
 	}
+	else if (splitCommand[0] == "CREATE")
+	{
+		triggerCreate(em, splitCommand);
+	}
+	else if (splitCommand[0] == "CRUSH")
+	{
+		triggerCrush(em, splitCommand);
+	}
 	else
 	{
 		em->addToCommandHistory("Invalid Command!");
@@ -55,6 +63,11 @@ void CommandHandler::executeCommand(EnvironmentManager* em, std::string input)
 
 void CommandHandler::triggerTeleport(EnvironmentManager* em, Root* root, std::vector<std::string> splitCommand)
 {
+	if (splitCommand.size() < 2)
+	{
+		em->addToCommandHistory("ERROR: Bad command!");
+		return;
+	}
 	int i = 0;
 	std::list<HardDrive *> hds = root->getConnectdHD();
 	for (auto it = hds.begin(); it != hds.end(); ++it)
@@ -86,9 +99,11 @@ void CommandHandler::triggerHelp(EnvironmentManager *em)
 {
 	std::list<std::string> commands = {
 	"",
-	"TELEPORT.[NODE LETTER]\t\t\t Switch to a different storage node.",
+	"TELEPORT.[NODE LETTER]\t\t\t Switch to a different storage Node.",
 	"SHIFT.[COLLECTION NAME]\t\t\tShift to a different Collection.",
-	"SHIFTUP\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tShift up one Collection."
+	"SHIFTUP\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tShift up one Collection.",
+	"CREATE.[TYPE].[NAME]\t\t\t\t\t\tCreate a Collection or File.",
+	"CRUSH.[TYPE].[NAME]\t\t\t\t\t\t\tDestroy a Collection or File.",
 	"SCAN\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tScan the current node or collection.",
 	"EXIT\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tShut down HoloGeisha OS.",
 	"HELP\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tShow all commands.",
@@ -124,7 +139,7 @@ void CommandHandler::triggerScan(EnvironmentManager *em, Root *root)
 			std::list<Folder *> folders = hd->getFolders();
 			for (auto it = folders.begin(); it != folders.end(); ++it)
 			{
-				em->addToCommandHistory((*it)->getFolderName() + "\t\t\t" + (*it)->getCreationDate());
+				em->addToCommandHistory((*it)->getFolderName() + "\t\t\t" + (*it)->getCreationDate() + "\t\t\t<COLLECTION>");
 			}
 		}
 	}
@@ -136,7 +151,7 @@ void CommandHandler::triggerScan(EnvironmentManager *em, Root *root)
 			std::list<Folder*> folders = currentFolder->getFolders();
 			for (auto it = folders.begin(); it != folders.end(); ++it)
 			{
-				em->addToCommandHistory((*it)->getFolderName() + "\t\t\t" + (*it)->getCreationDate());
+				em->addToCommandHistory((*it)->getFolderName() + "\t\t\t" + (*it)->getCreationDate() + "\t\t\t<COLLECTION>");
 			}
 		}
 	}
@@ -145,6 +160,11 @@ void CommandHandler::triggerScan(EnvironmentManager *em, Root *root)
 
 void CommandHandler::triggerShift(EnvironmentManager *em, std::vector<std::string> splitCommand)
 {
+	if (splitCommand.size() < 2)
+	{
+		em->addToCommandHistory("ERROR: Bad command!");
+		return;
+	}
 	int i = 0;
 	std::list<Folder*> folders{};
 	if (em->getCurrentDriveLocation() == NULL)
@@ -254,4 +274,104 @@ void CommandHandler::triggerRoot(EnvironmentManager* em)
 	std::list<std::string> currentPath{};
 	em->setCurrentPath(currentPath);
 	em->setDiskPrompt("#");
+}
+
+void CommandHandler::triggerCreate(EnvironmentManager* em, std::vector<std::string> splitCommand)
+{
+	if (splitCommand.size() < 3)
+	{
+		em->addToCommandHistory("ERROR: Bad command!");
+		return;
+	}
+	if (splitCommand[1] == "COLLECTION")
+	{
+		if (em->getCurrentFolderLocation() != NULL)
+		{
+			for (auto folder : em->getCurrentFolderLocation()->getFolders())
+			{
+				if (folder->getFolderName() == splitCommand[2])
+				{
+					em->addToCommandHistory("ERROR: A collection with that name already exists");
+					return;
+				}
+			}
+			Folder* folder = new Folder(splitCommand[2], em->getCurrentFolderLocation());
+			em->getCurrentFolderLocation()->addFolderToFolders(folder);
+		}
+		else if (em->getCurrentDriveLocation() != NULL)
+		{
+			for (auto folder : em->getCurrentDriveLocation()->getFolders())
+			{
+				if (folder->getFolderName() == splitCommand[2])
+				{
+					em->addToCommandHistory("ERROR: A collection with that name already exists");
+					return;
+				}
+			}
+			Folder* folder = new Folder(splitCommand[2], NULL);
+			em->getCurrentDriveLocation()->addFolder(folder);
+		}
+		else
+		{
+			em->addToCommandHistory("ERROR: Can't create a collection in the root");
+		}
+	}
+}
+
+void CommandHandler::triggerCrush(EnvironmentManager* em, std::vector<std::string> splitCommand)
+{
+	if (splitCommand.size() < 3)
+	{
+		em->addToCommandHistory("ERROR: Bad command!");
+		return;
+	}
+	if (splitCommand[1] == "COLLECTION")
+	{
+		std::list<Folder*> folders{};
+		bool folderPresent = false;
+		if (em->getCurrentFolderLocation() != NULL)
+		{
+			for (auto folder : em->getCurrentFolderLocation()->getFolders())
+			{
+				if (folder->getFolderName() == splitCommand[2])
+				{
+					delete folder;
+					folderPresent = true;
+				}
+				else
+				{
+					folders.push_back(folder);
+				}
+			}
+			if (!folderPresent)
+			{
+				em->addToCommandHistory("ERROR: No Collection with that name found.");
+			}
+			em->getCurrentFolderLocation()->setFolders(folders);
+		}
+		else if (em->getCurrentDriveLocation() != NULL)
+		{
+			for (auto folder : em->getCurrentDriveLocation()->getFolders())
+			{
+				if (folder->getFolderName() == splitCommand[2])
+				{
+					delete folder;
+					folderPresent = true;
+				}
+				else
+				{
+					folders.push_back(folder);
+				}
+			}
+			if (!folderPresent)
+			{
+				em->addToCommandHistory("ERROR: No Collection with that name found.");
+			}
+			em->getCurrentDriveLocation()->setFolders(folders);
+		}
+		else
+		{
+			em->addToCommandHistory("ERROR: Can't delete in Root.");
+		}
+	}
 }

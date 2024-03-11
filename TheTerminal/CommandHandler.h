@@ -13,7 +13,8 @@ public:
 	static void triggerShift(EnvironmentManager* em, std::vector<std::string> splitCommand);
 	static void triggerShiftUp(EnvironmentManager* em);
 	static void triggerRoot(EnvironmentManager* em);
-
+	static void triggerCreate(EnvironmentManager* em, std::vector<std::string> splitCommand);
+	static void triggerCrush(EnvironmentManager* em, std::vector<std::string> splitCommand);
 
 private:
 	

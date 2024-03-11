@@ -19,6 +19,11 @@ int main()
 
     ToggleFullscreen();
 
+    Image myImage = LoadImage("31589011-cdbc122c-b1bf-11e7-986f-2ebf6bcb8777.png");
+    Texture2D texture = LoadTextureFromImage(myImage);
+    UnloadImage(myImage);
+
+    //create temporary system
     HardDrive* hardDrive = new HardDrive("A", 32768);
     HardDrive* hardDrive2 = new HardDrive("B", 16384);
     Root* root = new Root();
@@ -29,11 +34,14 @@ int main()
     folder->addFolderToFolders(folder2);
     hardDrive2->addFolder(folder);
     EnvironmentManager* em = new EnvironmentManager(root->getRootPrompt(), root);
+
+    //boot sequence variables
     bool hasBooted = false;
     bool waiting = false;
     float bootNextUpdate = MethodLibrary::getRandomNumber(500, 2000) / 1000;
     float currentBootTime = 0.0f;
 
+    //begin the program
     while (!WindowShouldClose())
     {
         BeginDrawing();
@@ -41,8 +49,10 @@ int main()
 
         if (!hasBooted)
         {
+            // boot sequence
             if (currentBootTime > bootNextUpdate)
             {
+                //print next boot sequence line
                 bootNextUpdate = MethodLibrary::getRandomNumber(100, 300) / 1000.0f;
                 currentBootTime = 0.0f;
                 hasBooted = em->bootSequence();
@@ -50,19 +60,24 @@ int main()
             }
             else
             {
+                // wait for next boot sequence line
                 currentBootTime += GetFrameTime();
                 em->printCommandHistory();
             }
         }
         else
         {
+            // main program functionality
             em->detectKeyPress();
             em->detectReturnPress();
             em->printEverythingToScreen();
         }
-
+        DrawTextureEx(texture, { 0,0 }, 0, 1.5f, BLACK);
+        DrawTextureEx(texture, { 0,5 }, 0, 1.5f, BLACK);
         EndDrawing();
     }
+
+    UnloadTexture(texture);
     CloseWindow();
     return 0;
 }

@@ -11,6 +11,15 @@ public:
 	std::list<Folder*> getFolders(){ return folders; }
 	void addFolderToFolders(Folder* folder) { folders.push_back(folder); }
 	std::string getCreationDate() { return creationDate; }
+	void setFolders(std::list<Folder*> Folders) { folders = Folders; }
+
+
+	~Folder() {
+		for (auto folder : folders)
+		{
+			delete folder;
+		}
+	}
 private:
 	std::string folderName{};
 	std::list<Folder *> folders{};

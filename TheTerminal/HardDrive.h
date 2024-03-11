@@ -11,6 +11,7 @@ public:
 	int getHardDriveSize() { return size; }
 	std::string getDriveName() { return driveName; }
 	std::list<Folder*> getFolders() { return folders; }
+	void setFolders(std::list<Folder *> Folders) { folders = Folders; }
 private:
 	std::string driveName{};
 	int size{};

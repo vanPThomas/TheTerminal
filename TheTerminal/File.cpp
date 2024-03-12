@@ -1,4 +1,5 @@
+#pragma once
 #include "File.h"
 #include "MethodLibrary.h"
 
-File::File(int Size, std::string FileContent, std::string FileType) { size = Size; fileContent = FileContent; fileType = FileType; creationDate = MethodLibrary::getCurrentDateTime(); }
+File::File(int Size, std::string FileName, std::string FileType) { size = Size; fileName = FileName; fileType = FileType; creationDate = MethodLibrary::getCurrentDateTime(); }

@@ -6,6 +6,8 @@
 #include "Root.h"
 #include "HardDrive.h"
 #include "MethodLibrary.h"
+#include "File.h"
+#include "TextFile.h"
 
 int main()
 {
@@ -23,7 +25,14 @@ int main()
     Texture2D texture = LoadTextureFromImage(myImage);
     UnloadImage(myImage);
 
+
     //create temporary system
+    std::vector<File *>fileList{};
+    File* file1 = new TextFile(130, "KEYS", "TEXT");
+    File* file2 = new TextFile(270, "KERNEL SETTINGS", "TEXT");
+
+    fileList.push_back(file1);
+    fileList.push_back(file2);
     HardDrive* hardDrive = new HardDrive("A", 32768);
     HardDrive* hardDrive2 = new HardDrive("B", 16384);
     Root* root = new Root();
@@ -33,6 +42,8 @@ int main()
     Folder* folder2 = new Folder("DRIVERS", folder);
     folder->addFolderToFolders(folder2);
     hardDrive2->addFolder(folder);
+    folder->addFileToFiles(file1);
+    folder2->addFileToFiles(file2);
     EnvironmentManager* em = new EnvironmentManager(root->getRootPrompt(), root);
 
     //boot sequence variables
@@ -49,6 +60,9 @@ int main()
 
         if (!hasBooted)
         {
+
+            //TextFile *tf  = (TextFile*)fileList[0];
+            //std::cout << tf->content << "\n";
             // boot sequence
             if (currentBootTime > bootNextUpdate)
             {

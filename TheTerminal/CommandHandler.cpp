@@ -6,6 +6,8 @@
 #include <list>
 #include <vector>
 #include <iostream>
+#include "TextFile.h"
+#include "MethodLibrary.h"
 
 void CommandHandler::executeCommand(EnvironmentManager* em, std::string input)
 {
@@ -142,6 +144,14 @@ void CommandHandler::triggerScan(EnvironmentManager *em, Root *root)
 				em->addToCommandHistory((*it)->getFolderName() + "\t\t\t" + (*it)->getCreationDate() + "\t\t\t<COLLECTION>");
 			}
 		}
+		if (!hd->getFiles().empty())
+		{
+			std::list<File*> files = hd->getFiles();
+			for (auto it = files.begin(); it != files.end(); ++it)
+			{
+				em->addToCommandHistory((*it)->getFileName() + "\t\t\t" + (*it)->getCreationDate() + "\t\t\t<" + (*it)->getFileType() + ">" + "\t\t\t" + std::to_string((*it)->getFileSize()) + "kb");
+			}
+		}
 	}
 	else 
 	{
@@ -152,6 +162,14 @@ void CommandHandler::triggerScan(EnvironmentManager *em, Root *root)
 			for (auto it = folders.begin(); it != folders.end(); ++it)
 			{
 				em->addToCommandHistory((*it)->getFolderName() + "\t\t\t" + (*it)->getCreationDate() + "\t\t\t<COLLECTION>");
+			}
+		}
+		if (!currentFolder->getFiles().empty())
+		{
+			std::list<File*> files = currentFolder->getFiles();
+			for (auto it = files.begin(); it != files.end(); ++it)
+			{
+				em->addToCommandHistory((*it)->getFileName() + "\t\t\t" + (*it)->getCreationDate() + "\t\t\t<" + (*it)->getFileType() + ">" + "\t\t\t" + std::to_string((*it)->getFileSize()) + "kb");
 			}
 		}
 	}
@@ -316,6 +334,39 @@ void CommandHandler::triggerCreate(EnvironmentManager* em, std::vector<std::stri
 			em->addToCommandHistory("ERROR: Can't create a collection in the root");
 		}
 	}
+	else if (splitCommand[1] == "TEXT")
+	{
+		if (em->getCurrentFolderLocation() != NULL)
+		{
+			for (auto file : em->getCurrentFolderLocation()->getFiles())
+			{
+				if (file->getFileName() == splitCommand[2])
+				{
+					em->addToCommandHistory("ERROR: A text file with that name already exists");
+					return;
+				}
+			}
+			File* file = new TextFile(MethodLibrary::getRandomNumber(100, 1000), splitCommand[2], "TEXT");
+			em->getCurrentFolderLocation()->addFileToFiles(file);
+		}
+		else if (em->getCurrentDriveLocation() != NULL)
+		{
+			for (auto file : em->getCurrentDriveLocation()->getFiles())
+			{
+				if (file->getFileName() == splitCommand[2])
+				{
+					em->addToCommandHistory("ERROR: A text file with that name already exists");
+					return;
+				}
+			}
+			File* file = new TextFile(MethodLibrary::getRandomNumber(100, 1000), splitCommand[2], "TEXT");
+			em->getCurrentDriveLocation()->addFileToFiles(file);
+		}
+		else
+		{
+			em->addToCommandHistory("ERROR: Can't create a collection in the root");
+		}
+	}
 }
 
 void CommandHandler::triggerCrush(EnvironmentManager* em, std::vector<std::string> splitCommand)
@@ -368,6 +419,55 @@ void CommandHandler::triggerCrush(EnvironmentManager* em, std::vector<std::strin
 				em->addToCommandHistory("ERROR: No Collection with that name found.");
 			}
 			em->getCurrentDriveLocation()->setFolders(folders);
+		}
+		else
+		{
+			em->addToCommandHistory("ERROR: Can't delete in Root.");
+		}
+	}
+	else if (splitCommand[1] == "TEXT")
+	{
+		std::list<File*> files{};
+		bool filePresent = false;
+		if (em->getCurrentFolderLocation() != NULL)
+		{
+			for (auto file : em->getCurrentFolderLocation()->getFiles())
+			{
+				if (file->getFileName() == splitCommand[2] && file->getFileType() == splitCommand[1])
+				{
+					delete file;
+					filePresent = true;
+				}
+				else
+				{
+					files.push_back(file);
+				}
+			}
+			if (!filePresent)
+			{
+				em->addToCommandHistory("ERROR: Not a valid crush command.");
+			}
+			em->getCurrentFolderLocation()->setFiles(files);
+		}
+		else if (em->getCurrentDriveLocation() != NULL)
+		{
+			for (auto file : em->getCurrentDriveLocation()->getFiles())
+			{
+				if (file->getFileName() == splitCommand[2] && file->getFileType() == splitCommand[1])
+				{
+					delete file;
+					filePresent = true;
+				}
+				else
+				{
+					files.push_back(file);
+				}
+			}
+			if (!filePresent)
+			{
+				em->addToCommandHistory("ERROR: Not a valid crush command.");
+			}
+			em->getCurrentDriveLocation()->setFiles(files);
 		}
 		else
 		{

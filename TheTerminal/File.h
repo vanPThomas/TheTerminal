@@ -3,15 +3,15 @@
 class File
 {
 public:
-	File(int size, std::string FileContent, std::string FileType);
+	File(int size, std::string FileName, std::string FileType);
 	int getFileSize() { return size; }
 	std::string getCreationDate() { return creationDate; }
-	std::string getFileContent() { return fileContent; }
 	std::string getFileType() { return fileType; }
+	std::string getFileName() { return fileName; }
 private:
 	int size{};
 	std::string creationDate{};
-	std::string fileContent{};
 	std::string fileType{};
+	std::string fileName{};
 };
 

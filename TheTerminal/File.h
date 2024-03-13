@@ -1,5 +1,6 @@
 #pragma once
 #include<string>
+
 class File
 {
 public:
@@ -8,6 +9,7 @@ public:
 	std::string getCreationDate() { return creationDate; }
 	std::string getFileType() { return fileType; }
 	std::string getFileName() { return fileName; }
+
 private:
 	int size{};
 	std::string creationDate{};

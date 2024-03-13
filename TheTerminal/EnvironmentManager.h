@@ -25,6 +25,7 @@ public:
     void detectReturnPress();
     void printEverythingToScreen();
     void addToCommandHistory(std::string stringToAdd);
+    void setCommandHistory(std::string newCommandHistory) { commandHistory = newCommandHistory; }
     Vector2 getDiskPromptTextCoord() { return diskPromptCoord; }
     float getVerticleCoordJump() { return verticalCoordJump; }
     void setDiskPromptCoord(Vector2 newCoord) { diskPromptCoord = newCoord; }
@@ -36,6 +37,9 @@ public:
     Folder* getCurrentFolderLocation() { return currentFolderLocation; }
     std::list<std::string> getCurrentPath() { return currentPath; }
     void setCurrentPath(std::list<std::string> newCurentPath) { currentPath = newCurentPath; }
+    void setHistoryCoord(Vector2 newHistoryCoord) { historyCoord = newHistoryCoord; }
+    void setCursorCoord(Vector2 newCursorCoord) { cursorCoord = newCursorCoord; }
+    void setTypingCoord(Vector2 newTypingCoord) { typingCoord = newTypingCoord; }
 
 private:
     float cursorBlinkTime = 0.5f;

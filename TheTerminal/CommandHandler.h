@@ -15,6 +15,7 @@ public:
 	static void triggerRoot(EnvironmentManager* em);
 	static void triggerCreate(EnvironmentManager* em, std::vector<std::string> splitCommand);
 	static void triggerCrush(EnvironmentManager* em, std::vector<std::string> splitCommand);
+	static void triggerWipe(EnvironmentManager* em);
 
 private:
 	

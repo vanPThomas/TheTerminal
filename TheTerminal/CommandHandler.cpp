@@ -57,6 +57,10 @@ void CommandHandler::executeCommand(EnvironmentManager* em, std::string input)
 	{
 		triggerCrush(em, splitCommand);
 	}
+	else if (splitCommand[0] == "WIPE")
+	{
+		triggerWipe(em);
+	}
 	else
 	{
 		em->addToCommandHistory("Invalid Command!");
@@ -110,6 +114,7 @@ void CommandHandler::triggerHelp(EnvironmentManager *em)
 	"EXIT\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tShut down HoloGeisha OS.",
 	"HELP\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tShow all commands.",
 	"ROOT\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tGo to the system Root.",
+	"WIPE\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tWipe the command history",
 	""
 	};
 	for (auto it = commands.begin(); it != commands.end(); ++it)
@@ -474,4 +479,14 @@ void CommandHandler::triggerCrush(EnvironmentManager* em, std::vector<std::strin
 			em->addToCommandHistory("ERROR: Can't delete in Root.");
 		}
 	}
+}
+
+void CommandHandler::triggerWipe(EnvironmentManager* em)
+{
+	std::string newCommandHistory{};
+	em->setCommandHistory(newCommandHistory);
+	em->setHistoryCoord({ 10, 10 });
+	em->setDiskPromptCoord({ 10, 10 - em->getVerticleCoordJump()});
+	em->setCursorCoord({ static_cast<float>(em->getDiskPromptText().length()) , 10 - em->getVerticleCoordJump() });
+	em->setTypingCoord({ static_cast<float>(em->getDiskPromptText().length()), 10 - em->getVerticleCoordJump() });
 }

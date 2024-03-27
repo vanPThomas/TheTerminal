@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Encyclopedia">
+      <UniqueIdentifier>{7179fb67-564c-47f9-a21d-f0966cef2401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Encyclopedia\Header Files">
+      <UniqueIdentifier>{77739755-9e37-4642-b5d3-d8f3d53ef216}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Encyclopedia\Resource Files">
+      <UniqueIdentifier>{efa88f93-06d1-4509-b439-6e9237451a16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -42,6 +51,12 @@
     <ClCompile Include="TextFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EncyclopediaManager.cpp">
+      <Filter>Encyclopedia\Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Encyclopedia\Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Font Include="..\..\..\..\..\Users\Thomas\Downloads\oldschool_pc_font_pack_v2.2_win\ttf - Px (pixel outline)\Px437_IBM_VGA_8x14.ttf" />
@@ -70,6 +85,12 @@
     </ClInclude>
     <ClInclude Include="TextFile.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EncyclopediaManager.h">
+      <Filter>Encyclopedia\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Encyclopedia\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

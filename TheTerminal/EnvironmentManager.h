@@ -40,6 +40,8 @@ public:
     void setHistoryCoord(Vector2 newHistoryCoord) { historyCoord = newHistoryCoord; }
     void setCursorCoord(Vector2 newCursorCoord) { cursorCoord = newCursorCoord; }
     void setTypingCoord(Vector2 newTypingCoord) { typingCoord = newTypingCoord; }
+    std::string getActiveProgram() { return activeProgram; }
+    void setActiveProgram(std::string ActiveProgram) { activeProgram = ActiveProgram; }
 
 private:
     float cursorBlinkTime = 0.5f;
@@ -62,6 +64,8 @@ private:
     HardDrive* currentDriveLocation{};
     Folder* currentFolderLocation{};
     std::list<std::string> currentPath{};
+
+    std::string activeProgram = "TERMINAL";
 
     std::list<std::string> bootSequenceList = {
         "Detecting CPU ..." ,

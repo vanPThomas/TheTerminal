@@ -61,6 +61,10 @@ void CommandHandler::executeCommand(EnvironmentManager* em, std::string input)
 	{
 		triggerWipe(em);
 	}
+	else if (splitCommand[0] == "RUN")
+	{
+		triggerRun(em, splitCommand);
+	}
 	else
 	{
 		em->addToCommandHistory("Invalid Command!");
@@ -489,4 +493,20 @@ void CommandHandler::triggerWipe(EnvironmentManager* em)
 	em->setDiskPromptCoord({ 10, 10 - em->getVerticleCoordJump()});
 	em->setCursorCoord({ static_cast<float>(em->getDiskPromptText().length()) , 10 - em->getVerticleCoordJump() });
 	em->setTypingCoord({ static_cast<float>(em->getDiskPromptText().length()), 10 - em->getVerticleCoordJump() });
+}
+
+void CommandHandler::triggerRun(EnvironmentManager* em, std::vector<std::string> splitCommand)
+{
+	if (splitCommand[1] == "ENCYCLOPEDIA")
+	{
+		runEncyclopedia(em);
+	}
+	else
+	{
+		em->addToCommandHistory("Invalid Program!");
+	}
+}
+void CommandHandler::runEncyclopedia(EnvironmentManager* em)
+{
+	em->setActiveProgram("ENCYCLOPEDIA");
 }
